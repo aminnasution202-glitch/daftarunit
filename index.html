@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Daftar Unit – SafeTrans</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --orange-primary: #ea580c;
+    --orange-light:   #fff7ed;
+    --orange-mid:     #fed7aa;
+    --orange-deep:    #c2410c;
+    --orange-glow:    #fb923c;
+    --white:          #FFFFFF;
+    --gray-50:        #FAFAFA;
+    --gray-100:       #F5F5F5;
+    --gray-200:       #E5E5E5;
+    --gray-500:       #737373;
+    --gray-700:       #404040;
+    --gray-900:       #171717;
+    --green-wa:       #25D366;
+    --radius-sm:      6px;
+    --radius-md:      12px;
+    --radius-lg:      20px;
+    --shadow-card:    0 2px 12px rgba(242,101,34,0.10);
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-900);
+    min-height: 100vh;
+  }
+
+  /* ── NAVBAR (samakan dgn halaman lain) ── */
+  .st-navbar{
+    background:#fff;border-bottom:1px solid #e5e7eb;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 24px;height:60px;position:sticky;top:0;z-index:200;
+  }
+  .st-navbar-brand{ display:flex;align-items:center;gap:9px;text-decoration:none; }
+  .st-navbar-logo{ width:32px;height:32px;background:#ea580c;border-radius:8px;display:flex;align-items:center;justify-content:center; }
+  .st-navbar-logo svg{ width:18px;height:18px;fill:#fff; }
+  .st-navbar-name{ font-size:1.05rem;font-weight:800;color:#171717; }
+  .st-navbar-name span{ color:#ea580c; }
+  .st-nav-username{ font-size:.8rem;font-weight:600;color:#4b5563;white-space:nowrap;margin-right:8px; }
+  .st-btn-logout{ font-family:inherit;font-size:.8rem;font-weight:600;border:none;cursor:pointer;
+    border-radius:9px;padding:7px 13px;background:#fee2e2;color:#b91c1c;transition:background .15s; }
+  .st-btn-logout:hover{ background:#fecaca; }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, var(--orange-primary) 0%, var(--orange-deep) 60%, #8B2A00 100%);
+    padding: 28px 24px;
+  }
+  .header-inner { max-width: 640px; margin: 0 auto; text-align:center; }
+  .header-inner h1 { color: var(--white); font-size: 22px; font-weight: 900; letter-spacing:-0.4px; }
+  .header-inner p { color: rgba(255,255,255,0.85); font-size: 13px; margin-top:6px; }
+
+  main { max-width: 560px; margin: 0 auto; padding: 28px 16px 60px; }
+
+  .card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--gray-200);
+    padding: 28px 24px;
+  }
+
+  /* ── LOGIN SCREEN ── */
+  #loginScreen .card { max-width: 380px; margin: 40px auto 0; text-align:center; }
+  .login-icon{
+    width:56px;height:56px;border-radius:50%;background:var(--orange-light);
+    display:flex;align-items:center;justify-content:center;margin:0 auto 14px;
+  }
+  .login-icon svg{ width:28px;height:28px;stroke:var(--orange-primary); }
+  #loginScreen h2{ font-size:18px;font-weight:800;margin-bottom:4px; }
+  #loginScreen p.sub{ font-size:13px;color:var(--gray-500);margin-bottom:18px; }
+
+  /* ── FORM ELEMENTS ── */
+  .field { margin-bottom: 18px; text-align:left; }
+  .field label {
+    display:block; font-size:12px; font-weight:700; color:var(--gray-700);
+    margin-bottom:6px; text-transform:uppercase; letter-spacing:0.4px;
+  }
+  .field input[type="text"],
+  .field input[type="number"],
+  .field input[type="password"],
+  .field select {
+    width:100%; padding:12px 14px; font-family:inherit; font-size:14px;
+    border:1.5px solid var(--gray-200); border-radius:var(--radius-sm);
+    background:var(--white); color:var(--gray-900); outline:none;
+    transition: border-color .15s;
+  }
+  .field input:focus, .field select:focus { border-color: var(--orange-primary); }
+  .field select{ appearance:none; cursor:pointer;
+    background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="%23737373" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>');
+    background-repeat:no-repeat; background-position:right 14px center;
+  }
+  .hint { font-size: 11px; color: var(--gray-500); margin-top: 5px; }
+
+  /* ── FILE UPLOAD ── */
+  .upload-box {
+    border: 1.5px dashed var(--orange-mid);
+    border-radius: var(--radius-md);
+    background: var(--orange-light);
+    padding: 16px;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    transition: border-color .15s, background .15s;
+  }
+  .upload-box:hover { border-color: var(--orange-primary); }
+  .upload-box.has-file { border-style: solid; border-color: var(--orange-primary); }
+  .upload-box input[type="file"] {
+    position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%;
+  }
+  .upload-box svg { width:26px; height:26px; stroke:var(--orange-primary); margin-bottom:6px; }
+  .upload-label { font-size:13px; font-weight:600; color:var(--orange-deep); }
+  .upload-sub { font-size:11px; color:var(--gray-500); margin-top:2px; }
+  .upload-preview {
+    width:100%; max-height:160px; object-fit:contain; border-radius:8px;
+    margin-bottom:8px; display:none;
+  }
+
+  /* ── BUTTON ── */
+  .btn-primary {
+    width:100%; padding:14px; font-family:inherit; font-size:14px; font-weight:700;
+    color:var(--white); background:var(--orange-primary); border:none;
+    border-radius:var(--radius-sm); cursor:pointer; transition: background .15s, transform .1s;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .btn-primary:hover { background:var(--orange-deep); }
+  .btn-primary:disabled { background: var(--gray-200); color: var(--gray-500); cursor:not-allowed; }
+
+  .spinner-sm {
+    width:16px; height:16px; border:2.5px solid rgba(255,255,255,0.4);
+    border-top-color: var(--white); border-radius:50%;
+    animation: spin .7s linear infinite;
+  }
+  .spinner-sm.dark { border:2.5px solid var(--orange-mid); border-top-color: var(--orange-primary); }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .alert {
+    padding: 11px 14px; border-radius: var(--radius-sm); font-size: 12.5px;
+    margin-bottom: 16px; display:none; line-height:1.5;
+  }
+  .alert-error { background:#FEF2F2; color:#B91C1C; border:1px solid #FECACA; }
+  .alert-success { background:#E6F9F0; color:#15803D; border:1px solid #BBF7D0; }
+
+  /* ── SUCCESS SCREEN ── */
+  #successScreen { display:none; text-align:center; padding: 50px 20px; }
+  #successScreen .check-circle {
+    width:70px; height:70px; border-radius:50%; background:#E6F9F0;
+    display:flex; align-items:center; justify-content:center; margin:0 auto 16px;
+  }
+  #successScreen .check-circle svg { width:36px; height:36px; stroke:#15803D; }
+  #successScreen h2 { font-size:19px; font-weight:800; margin-bottom:6px; }
+  #successScreen p { font-size:13px; color:var(--gray-500); max-width:340px; margin:0 auto 22px; line-height:1.6; }
+
+  .section-divider { display:flex; align-items:center; gap:10px; margin: 22px 0 16px; }
+  .section-divider span { font-size:11px; font-weight:700; color:var(--orange-deep); text-transform:uppercase; letter-spacing:0.6px; white-space:nowrap; }
+  .section-divider .line { flex:1; height:1px; background:var(--gray-200); }
+
+  #formScreen, #loginScreen { display:none; }
+</style>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav class="st-navbar">
+  <a class="st-navbar-brand" href="index.html">
+    <div class="st-navbar-logo">
+      <svg viewBox="0 0 24 24"><path d="M1 17h2v2h2v-2h10v2h2v-2h2v-4l-3-6H3L1 13v4zm4-8h12l2 4H3l2-4zm-2 6a1 1 0 110-2 1 1 0 010 2zm12 0a1 1 0 110-2 1 1 0 010 2z"/></svg>
+    </div>
+    <span class="st-navbar-name">Safe<span>Trans</span></span>
+  </a>
+  <div id="navUserBox" style="display:none;align-items:center;">
+    <span class="st-nav-username" id="navUserName"></span>
+    <button class="st-btn-logout" onclick="doLogout()">Keluar</button>
+  </div>
+</nav>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="header-inner">
+    <h1>🚛 Daftarkan Unit Truk Anda</h1>
+    <p>Isi data unit untuk bergabung sebagai mitra armada SafeTrans</p>
+  </div>
+</header>
+
+<main>
+
+  <!-- ════════ LOGIN SCREEN ════════ -->
+  <div id="loginScreen">
+    <div class="card">
+      <div class="login-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+        </svg>
+      </div>
+      <h2>Masuk untuk Daftar Unit</h2>
+      <p class="sub">Tidak perlu mendaftar akun baru. Masukkan password yang sudah diberikan kepada Anda.</p>
+
+      <div class="alert alert-error" id="loginError"></div>
+
+      <div class="field">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" placeholder="Masukkan password" autocomplete="off"/>
+      </div>
+
+      <button class="btn-primary" id="btnLogin" onclick="handleLogin()">
+        <span id="loginBtnText">Masuk</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ════════ FORM SCREEN ════════ -->
+  <div id="formScreen">
+    <div class="card">
+
+      <div class="alert alert-error" id="formError"></div>
+
+      <form id="unitForm" onsubmit="return false;">
+
+        <div class="field">
+          <label for="tipeTruk">1. Tipe Truk</label>
+          <select id="tipeTruk" required>
+            <option value="" disabled selected>Pilih tipe truk</option>
+            <option value="CDE">CDE</option>
+            <option value="CDE Long">CDE Long</option>
+            <option value="CDD">CDD</option>
+            <option value="CDD Long">CDD Long</option>
+            <option value="Fuso">Fuso</option>
+            <option value="Fuso Long">Fuso Long</option>
+            <option value="Tronton">Tronton</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="karoseri">2. Karoseri</label>
+          <select id="karoseri" required>
+            <option value="" disabled selected>Pilih karoseri</option>
+            <option value="Box">Box</option>
+            <option value="Bak">Bak</option>
+            <option value="Bak Triway">Bak Triway</option>
+            <option value="Losbak Wingbox">Losbak Wingbox</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="noPolisi">3. Nomor Polisi</label>
+          <input type="text" id="noPolisi" placeholder="Contoh: B 1234 ABC" style="text-transform:uppercase" required/>
+        </div>
+
+        <div class="field">
+          <label for="tahunUnit">4. Tahun Unit</label>
+          <input type="number" id="tahunUnit" placeholder="Contoh: 2020" min="1990" max="2026" required/>
+        </div>
+
+        <div class="field">
+          <label for="namaPemilik">5. Nama Pemilik / Pengurus</label>
+          <input type="text" id="namaPemilik" placeholder="Nama lengkap" required/>
+        </div>
+
+        <div class="section-divider"><span>Dokumen &amp; Foto</span><div class="line"></div></div>
+
+        <div class="field">
+          <label>6. Foto STNK</label>
+          <div class="upload-box" id="boxSTNK">
+            <img class="upload-preview" id="previewSTNK"/>
+            <svg id="iconSTNK" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <div class="upload-label" id="labelSTNK">Tap untuk unggah foto STNK</div>
+            <div class="upload-sub">JPG/PNG, maks 5MB</div>
+            <input type="file" id="fileSTNK" accept="image/*" capture="environment" onchange="handleFileSelect(this,'STNK')"/>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>7. Foto KIR</label>
+          <div class="upload-box" id="boxKIR">
+            <img class="upload-preview" id="previewKIR"/>
+            <svg id="iconKIR" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <div class="upload-label" id="labelKIR">Tap untuk unggah foto KIR</div>
+            <div class="upload-sub">JPG/PNG, maks 5MB</div>
+            <input type="file" id="fileKIR" accept="image/*" capture="environment" onchange="handleFileSelect(this,'KIR')"/>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>8. Foto Unit</label>
+          <div class="upload-box" id="boxUnit">
+            <img class="upload-preview" id="previewUnit"/>
+            <svg id="iconUnit" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <div class="upload-label" id="labelUnit">Tap untuk unggah foto unit truk</div>
+            <div class="upload-sub">JPG/PNG, maks 5MB</div>
+            <input type="file" id="fileUnit" accept="image/*" capture="environment" onchange="handleFileSelect(this,'Unit')"/>
+          </div>
+        </div>
+
+        <button type="button" class="btn-primary" id="btnSubmit" onclick="handleSubmit()" style="margin-top:8px;">
+          <span id="submitBtnText">Kirim Data Unit</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ════════ SUCCESS SCREEN ════════ -->
+  <div id="successScreen">
+    <div class="check-circle">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <h2>Data Unit Terkirim!</h2>
+    <p>Tim SafeTrans akan memverifikasi data dan dokumen unit Anda. Anda akan dihubungi melalui WhatsApp setelah proses verifikasi selesai.</p>
+    <button class="btn-primary" style="max-width:240px;margin:0 auto;" onclick="resetFormScreen()">Daftarkan Unit Lain</button>
+  </div>
+
+</main>
+
+<script>
+  // ─────────────────────────────────────────────
+  // KONFIGURASI — ganti dengan URL Web App Apps Script Anda
+  // (Deploy Code-Daftar-Unit.gs sebagai Web App → Execute as: Me → Who has access: Anyone)
+  // ─────────────────────────────────────────────
+  const APPS_SCRIPT_URL = "PASTE_URL_WEB_APP_DISINI";
+
+  const selectedFiles = { STNK: null, KIR: null, Unit: null };
+
+  // ── Cek sesi login tersimpan ──
+  (function init() {
+    try {
+      const u = JSON.parse(localStorage.getItem('unitUser') || 'null');
+      if (u && u.nama) {
+        showFormScreen(u.nama);
+        return;
+      }
+    } catch (e) {}
+    showLoginScreen();
+  })();
+
+  function showLoginScreen() {
+    document.getElementById('loginScreen').style.display = 'block';
+    document.getElementById('formScreen').style.display = 'none';
+    document.getElementById('navUserBox').style.display = 'none';
+  }
+
+  function showFormScreen(nama) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('formScreen').style.display = 'block';
+    document.getElementById('navUserBox').style.display = 'flex';
+    document.getElementById('navUserName').textContent = 'Halo, ' + nama;
+  }
+
+  function doLogout() {
+    localStorage.removeItem('unitUser');
+    location.reload();
+  }
+
+  // ─────────────────────────────────────────────
+  // LOGIN — cek password ke Google Sheet via Apps Script
+  // ─────────────────────────────────────────────
+  async function handleLogin() {
+    const password = document.getElementById('loginPassword').value.trim();
+    const errBox = document.getElementById('loginError');
+    errBox.style.display = 'none';
+
+    if (!password) {
+      errBox.textContent = 'Password tidak boleh kosong.';
+      errBox.style.display = 'block';
+      return;
+    }
+    if (APPS_SCRIPT_URL.includes('PASTE_URL')) {
+      errBox.textContent = 'URL Apps Script belum dikonfigurasi. Lihat komentar di bagian script.';
+      errBox.style.display = 'block';
+      return;
+    }
+
+    const btn = document.getElementById('btnLogin');
+    btn.disabled = true;
+    document.getElementById('loginBtnText').innerHTML = '<span class="spinner-sm"></span>';
+
+    try {
+      const res = await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'checkLogin', password })
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        localStorage.setItem('unitUser', JSON.stringify({ nama: data.nama, password }));
+        showFormScreen(data.nama);
+      } else {
+        errBox.textContent = data.message || 'Password salah. Silakan coba lagi.';
+        errBox.style.display = 'block';
+      }
+    } catch (e) {
+      errBox.textContent = 'Gagal terhubung ke server. Periksa koneksi internet Anda.';
+      errBox.style.display = 'block';
+    } finally {
+      btn.disabled = false;
+      document.getElementById('loginBtnText').textContent = 'Masuk';
+    }
+  }
+
+  // ─────────────────────────────────────────────
+  // PILIH & KOMPRES FOTO
+  // ─────────────────────────────────────────────
+  function handleFileSelect(input, key) {
+    const file = input.files[0];
+    if (!file) return;
+
+    compressImage(file, 1280, 0.7).then(dataUrl => {
+      selectedFiles[key] = { data: dataUrl, name: file.name };
+      const box = document.getElementById('box' + key);
+      const preview = document.getElementById('preview' + key);
+      const icon = document.getElementById('icon' + key);
+      const label = document.getElementById('label' + key);
+      preview.src = dataUrl;
+      preview.style.display = 'block';
+      icon.style.display = 'none';
+      label.textContent = '✓ ' + file.name;
+      box.classList.add('has-file');
+    });
+  }
+
+  function compressImage(file, maxWidth, quality) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          let w = img.width, h = img.height;
+          if (w > maxWidth) { h = Math.round(h * (maxWidth / w)); w = maxWidth; }
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+        img.onerror = reject;
+        img.src = e.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // ─────────────────────────────────────────────
+  // SUBMIT FORM UNIT
+  // ─────────────────────────────────────────────
+  async function handleSubmit() {
+    const errBox = document.getElementById('formError');
+    errBox.style.display = 'none';
+
+    const tipeTruk   = document.getElementById('tipeTruk').value;
+    const karoseri    = document.getElementById('karoseri').value;
+    const noPolisi    = document.getElementById('noPolisi').value.trim();
+    const tahunUnit   = document.getElementById('tahunUnit').value.trim();
+    const namaPemilik = document.getElementById('namaPemilik').value.trim();
+
+    if (!tipeTruk || !karoseri || !noPolisi || !tahunUnit || !namaPemilik) {
+      errBox.textContent = 'Mohon lengkapi semua data unit (poin 1–5).';
+      errBox.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    if (!selectedFiles.STNK || !selectedFiles.KIR || !selectedFiles.Unit) {
+      errBox.textContent = 'Mohon unggah ketiga foto: STNK, KIR, dan foto unit.';
+      errBox.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    const btn = document.getElementById('btnSubmit');
+    btn.disabled = true;
+    document.getElementById('submitBtnText').innerHTML = '<span class="spinner-sm"></span> Mengirim…';
+
+    try {
+      const session = JSON.parse(localStorage.getItem('unitUser') || '{}');
+      const res = await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          action: 'submitUnit',
+          password: session.password || '',
+          tipeTruk, karoseri, noPolisi, tahunUnit, namaPemilik,
+          fotoSTNK: selectedFiles.STNK,
+          fotoKIR: selectedFiles.KIR,
+          fotoUnit: selectedFiles.Unit
+        })
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        document.getElementById('formScreen').style.display = 'none';
+        document.getElementById('successScreen').style.display = 'block';
+      } else {
+        errBox.textContent = data.message || 'Gagal mengirim data. Coba lagi.';
+        errBox.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    } catch (e) {
+      errBox.textContent = 'Gagal terhubung ke server. Periksa koneksi internet Anda.';
+      errBox.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } finally {
+      btn.disabled = false;
+      document.getElementById('submitBtnText').textContent = 'Kirim Data Unit';
+    }
+  }
+
+  function resetFormScreen() {
+    document.getElementById('unitForm').reset();
+    Object.keys(selectedFiles).forEach(k => {
+      selectedFiles[k] = null;
+      document.getElementById('preview' + k).style.display = 'none';
+      document.getElementById('icon' + k).style.display = 'block';
+      document.getElementById('box' + k).classList.remove('has-file');
+    });
+    document.getElementById('label' + 'STNK').textContent = 'Tap untuk unggah foto STNK';
+    document.getElementById('label' + 'KIR').textContent = 'Tap untuk unggah foto KIR';
+    document.getElementById('label' + 'Unit').textContent = 'Tap untuk unggah foto unit truk';
+    document.getElementById('successScreen').style.display = 'none';
+    document.getElementById('formScreen').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
