@@ -266,10 +266,16 @@
           <input type="text" id="namaPemilik" placeholder="Nama lengkap" required/>
         </div>
 
+        <div class="field">
+          <label for="kontakPemilik">6. Kontak Pemilik / Pengurus</label>
+          <input type="text" id="kontakPemilik" placeholder="Contoh: 081234567890" required/>
+          <div class="hint">Nomor WhatsApp aktif untuk dihubungi tim verifikasi</div>
+        </div>
+
         <div class="section-divider"><span>Dokumen &amp; Foto</span><div class="line"></div></div>
 
         <div class="field">
-          <label>6. Foto STNK</label>
+          <label>7. Foto STNK</label>
           <div class="upload-box" id="boxSTNK">
             <img class="upload-preview" id="previewSTNK"/>
             <svg id="iconSTNK" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
@@ -280,7 +286,7 @@
         </div>
 
         <div class="field">
-          <label>7. Foto KIR</label>
+          <label>8. Foto KIR</label>
           <div class="upload-box" id="boxKIR">
             <img class="upload-preview" id="previewKIR"/>
             <svg id="iconKIR" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
@@ -291,7 +297,7 @@
         </div>
 
         <div class="field">
-          <label>8. Foto Unit</label>
+          <label>9. Foto Unit</label>
           <div class="upload-box" id="boxUnit">
             <img class="upload-preview" id="previewUnit"/>
             <svg id="iconUnit" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
@@ -455,14 +461,15 @@
     const errBox = document.getElementById('formError');
     errBox.style.display = 'none';
 
-    const tipeTruk   = document.getElementById('tipeTruk').value;
-    const karoseri    = document.getElementById('karoseri').value;
-    const noPolisi    = document.getElementById('noPolisi').value.trim();
-    const tahunUnit   = document.getElementById('tahunUnit').value.trim();
-    const namaPemilik = document.getElementById('namaPemilik').value.trim();
+    const tipeTruk     = document.getElementById('tipeTruk').value;
+    const karoseri      = document.getElementById('karoseri').value;
+    const noPolisi       = document.getElementById('noPolisi').value.trim();
+    const tahunUnit      = document.getElementById('tahunUnit').value.trim();
+    const namaPemilik    = document.getElementById('namaPemilik').value.trim();
+    const kontakPemilik  = document.getElementById('kontakPemilik').value.trim();
 
-    if (!tipeTruk || !karoseri || !noPolisi || !tahunUnit || !namaPemilik) {
-      errBox.textContent = 'Mohon lengkapi semua data unit (poin 1–5).';
+    if (!tipeTruk || !karoseri || !noPolisi || !tahunUnit || !namaPemilik || !kontakPemilik) {
+      errBox.textContent = 'Mohon lengkapi semua data unit (poin 1–6).';
       errBox.style.display = 'block';
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
@@ -486,7 +493,7 @@
         body: JSON.stringify({
           action: 'submitUnit',
           password: session.password || '',
-          tipeTruk, karoseri, noPolisi, tahunUnit, namaPemilik,
+          tipeTruk, karoseri, noPolisi, tahunUnit, namaPemilik, kontakPemilik,
           fotoSTNK: selectedFiles.STNK,
           fotoKIR: selectedFiles.KIR,
           fotoUnit: selectedFiles.Unit
