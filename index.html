@@ -166,6 +166,38 @@
   .section-divider .line { flex:1; height:1px; background:var(--gray-200); }
 
   #formScreen, #loginScreen { display:none; }
+
+  /* ── UPLOAD ACTION SHEET ── */
+  .sheet-overlay{
+    position:fixed; inset:0; background:rgba(23,23,23,0.5);
+    opacity:0; visibility:hidden; transition:opacity .2s ease; z-index:998;
+  }
+  .sheet-overlay.show{ opacity:1; visibility:visible; }
+  .upload-sheet{
+    position:fixed; left:0; right:0; bottom:0; max-width:560px; margin:0 auto;
+    background:var(--white); border-radius:20px 20px 0 0; padding:10px 20px 26px;
+    transform:translateY(100%); transition:transform .25s ease; z-index:999;
+    box-shadow:0 -10px 30px rgba(0,0,0,0.18);
+  }
+  .upload-sheet.show{ transform:translateY(0); }
+  .upload-sheet-handle{ width:36px; height:4px; background:var(--gray-200); border-radius:2px; margin:0 auto 16px; }
+  .upload-sheet-title{
+    font-size:12px; font-weight:700; color:var(--gray-500); text-align:center;
+    margin-bottom:16px; text-transform:uppercase; letter-spacing:0.5px;
+  }
+  .upload-sheet-btn{
+    width:100%; display:flex; align-items:center; gap:12px; padding:14px 16px;
+    font-family:inherit; font-size:14.5px; font-weight:600; color:var(--gray-900);
+    background:var(--orange-light); border:1.5px solid var(--orange-mid);
+    border-radius:var(--radius-md); margin-bottom:10px; cursor:pointer; text-align:left;
+  }
+  .upload-sheet-btn svg{ width:20px; height:20px; stroke:var(--orange-primary); flex-shrink:0; }
+  .upload-sheet-btn:active{ background:var(--orange-mid); }
+  .upload-sheet-cancel{
+    width:100%; padding:13px; font-family:inherit; font-size:14px; font-weight:700;
+    color:var(--gray-500); background:var(--gray-100); border:none;
+    border-radius:var(--radius-md); cursor:pointer; margin-top:4px;
+  }
 </style>
 </head>
 <body>
@@ -276,35 +308,38 @@
 
         <div class="field">
           <label>7. Foto STNK</label>
-          <div class="upload-box" id="boxSTNK">
+          <div class="upload-box" id="boxSTNK" onclick="openUploadSheet('STNK','Foto STNK')">
             <img class="upload-preview" id="previewSTNK"/>
             <svg id="iconSTNK" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
             <div class="upload-label" id="labelSTNK">Tap untuk unggah foto STNK</div>
             <div class="upload-sub">JPG/PNG, maks 5MB</div>
-            <input type="file" id="fileSTNK" accept="image/*" capture="environment" onchange="handleFileSelect(this,'STNK')"/>
           </div>
+          <input type="file" id="fileSTNK_camera" accept="image/*" capture="environment" style="display:none" onchange="handleFileSelect(this,'STNK')"/>
+          <input type="file" id="fileSTNK_gallery" accept="image/*" style="display:none" onchange="handleFileSelect(this,'STNK')"/>
         </div>
 
         <div class="field">
           <label>8. Foto KIR</label>
-          <div class="upload-box" id="boxKIR">
+          <div class="upload-box" id="boxKIR" onclick="openUploadSheet('KIR','Foto KIR')">
             <img class="upload-preview" id="previewKIR"/>
             <svg id="iconKIR" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
             <div class="upload-label" id="labelKIR">Tap untuk unggah foto KIR</div>
             <div class="upload-sub">JPG/PNG, maks 5MB</div>
-            <input type="file" id="fileKIR" accept="image/*" capture="environment" onchange="handleFileSelect(this,'KIR')"/>
           </div>
+          <input type="file" id="fileKIR_camera" accept="image/*" capture="environment" style="display:none" onchange="handleFileSelect(this,'KIR')"/>
+          <input type="file" id="fileKIR_gallery" accept="image/*" style="display:none" onchange="handleFileSelect(this,'KIR')"/>
         </div>
 
         <div class="field">
           <label>9. Foto Unit</label>
-          <div class="upload-box" id="boxUnit">
+          <div class="upload-box" id="boxUnit" onclick="openUploadSheet('Unit','Foto Unit Truk')">
             <img class="upload-preview" id="previewUnit"/>
             <svg id="iconUnit" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
             <div class="upload-label" id="labelUnit">Tap untuk unggah foto unit truk</div>
             <div class="upload-sub">JPG/PNG, maks 5MB</div>
-            <input type="file" id="fileUnit" accept="image/*" capture="environment" onchange="handleFileSelect(this,'Unit')"/>
           </div>
+          <input type="file" id="fileUnit_camera" accept="image/*" capture="environment" style="display:none" onchange="handleFileSelect(this,'Unit')"/>
+          <input type="file" id="fileUnit_gallery" accept="image/*" style="display:none" onchange="handleFileSelect(this,'Unit')"/>
         </div>
 
         <button type="button" class="btn-primary" id="btnSubmit" onclick="handleSubmit()" style="margin-top:8px;">
@@ -326,6 +361,23 @@
 
 </main>
 
+<!-- ════════ UPLOAD ACTION SHEET ════════ -->
+<div class="sheet-overlay" id="uploadSheetOverlay" onclick="closeUploadSheet()"></div>
+<div class="upload-sheet" id="uploadSheet">
+  <div class="upload-sheet-handle"></div>
+  <div class="upload-sheet-title" id="uploadSheetTitle">Pilih Sumber Gambar</div>
+  <button type="button" class="upload-sheet-btn" onclick="triggerUpload('camera')">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+    Ambil Foto
+  </button>
+  <button type="button" class="upload-sheet-btn" onclick="triggerUpload('gallery')">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+    Pilih dari Galeri
+  </button>
+  <button type="button" class="upload-sheet-cancel" onclick="closeUploadSheet()">Batal</button>
+</div>
+
+
 <script>
   // ─────────────────────────────────────────────
   // KONFIGURASI — ganti dengan URL Web App Apps Script Anda
@@ -334,6 +386,32 @@
   const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzvEJqF-ymsOKaNFrGSw5MvsFnQLzRtQUHA9BoK23ZuZH-MMbtH94lTgNNpQ9leo_kPQg/exec";
 
   const selectedFiles = { STNK: null, KIR: null, Unit: null };
+
+  // ─────────────────────────────────────────────
+  // ACTION SHEET — pilih Ambil Foto / Pilih dari Galeri
+  // ─────────────────────────────────────────────
+  let currentUploadKey = null;
+
+  function openUploadSheet(key, title) {
+    currentUploadKey = key;
+    document.getElementById('uploadSheetTitle').textContent = title || 'Pilih Sumber Gambar';
+    document.getElementById('uploadSheetOverlay').classList.add('show');
+    document.getElementById('uploadSheet').classList.add('show');
+  }
+
+  function closeUploadSheet() {
+    document.getElementById('uploadSheetOverlay').classList.remove('show');
+    document.getElementById('uploadSheet').classList.remove('show');
+  }
+
+  function triggerUpload(source) {
+    if (!currentUploadKey) return;
+    const inputId = 'file' + currentUploadKey + '_' + source;
+    const input = document.getElementById(inputId);
+    closeUploadSheet();
+    if (input) input.click();
+  }
+
 
   // ── Cek sesi login tersimpan ──
   (function init() {
